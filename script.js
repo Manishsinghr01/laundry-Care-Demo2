@@ -55,13 +55,18 @@ function scrollToBooking() {
   document.getElementById("services").scrollIntoView({ behavior: "smooth" });
 }
 
-
 const SERVICE_ID  = 'service_lcf495t';   
 const TEMPLATE_ID = 'template_w0sjb9i'; 
 
-
 document.getElementById("bookingForm").addEventListener("submit", function (e) {
   e.preventDefault();
+
+  
+  if (Object.keys(cart).length === 0) {
+    alert("Please add at least one service before booking!");
+    return;
+  }
+  
 
   const fullName = document.getElementById("fullName").value;
   const email    = document.getElementById("email").value;
@@ -86,10 +91,23 @@ document.getElementById("bookingForm").addEventListener("submit", function (e) {
       function () {
         const msg = document.getElementById("bookingMessage");
         msg.style.display = "block";
-        msg.style.color = "#0f9d58";
         msg.textContent = "Email has been sent successfully!";
 
-        e.target.reset();
+        // Inputs ko fade karo (CLEAR NAHI)
+        const nameInput  = document.getElementById("fullName");
+        const emailInput = document.getElementById("email");
+        const phoneInput = document.getElementById("phone");
+
+        nameInput.readOnly = true;
+        emailInput.readOnly = true;
+        phoneInput.readOnly = true;
+
+        nameInput.classList.add("input-readonly");
+        emailInput.classList.add("input-readonly");
+        phoneInput.classList.add("input-readonly");
+
+       
+        document.querySelector(".book-btn").disabled = true;
       },
       function (error) {
         const msg = document.getElementById("bookingMessage");
@@ -101,7 +119,6 @@ document.getElementById("bookingForm").addEventListener("submit", function (e) {
     );
 });
 
-
 function handleSubscribe(event) {
   event.preventDefault();
   const name  = document.getElementById("subName").value;
@@ -110,7 +127,4 @@ function handleSubscribe(event) {
   event.target.reset();
 }
 
-
 window.addEventListener("load", updateTable);
-
-
